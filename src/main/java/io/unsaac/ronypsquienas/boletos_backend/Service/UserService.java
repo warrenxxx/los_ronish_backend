@@ -60,7 +60,7 @@ public class UserService {
                         dao.findFirstByUser(e.getUser())
                                 .doOnNext(System.out::println)
                                 .filter(user->BCrypt.checkpw(e.getPassword(), user.getPassword()))
-                        .defaultIfEmpty(new User().setUser("no existe"))
+                        .switchIfEmpty(Mono.error(new Exception("no existe")))
                 ).flatMap(e->ok().body(Mono.just(e),User.class));
     }
 
