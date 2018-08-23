@@ -18,6 +18,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 @Controller
 public class UserController {
+
     @Bean
     RouterFunction routerFunction(UserService service){
         return route(GET("/user"),service::findAll)

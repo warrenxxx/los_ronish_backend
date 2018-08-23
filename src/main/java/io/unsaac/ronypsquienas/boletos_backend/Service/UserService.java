@@ -7,11 +7,17 @@
  */
 package io.unsaac.ronypsquienas.boletos_backend.Service;
 
+import io.unsaac.ronypsquienas.boletos_backend.dao.PersonDao;
 import io.unsaac.ronypsquienas.boletos_backend.dao.UserDao;
 import io.unsaac.ronypsquienas.boletos_backend.dto.LoginDto;
+import io.unsaac.ronypsquienas.boletos_backend.dto.ReqRegisterDto;
+import io.unsaac.ronypsquienas.boletos_backend.dto.ResLoginDto;
+import io.unsaac.ronypsquienas.boletos_backend.models.Person;
 import io.unsaac.ronypsquienas.boletos_backend.models.User;
+import io.unsaac.ronypsquienas.boletos_backend.utils.Ref;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.gridfs.GridFsOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -23,10 +29,18 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 public class UserService {
     @Autowired
     UserDao dao;
+
+    @Autowired
+    PersonDao personDao;
     public Mono<ServerResponse> insert(ServerRequest request){
-        return request.bodyToMono(User.class)
-                .map(e->e.setPassword(BCrypt.hashpw(e.getPassword(), BCrypt.gensalt())))
-                .flatMap(dao::insert)
+        return request.bodyToMono(ReqRegisterDto.class)
+                .map(e->e
+                        .setPassword(BCrypt.hashpw(e.getPassword(), BCrypt.gensalt()))
+                )
+                .flatMap(e->personDao.insert(e.getPerson())
+                        .flatMap(f->dao.insert(e.getUser().setIdPerson(Ref.PersonRef(f.getId()))))
+                )
+
                 .flatMap(e->ok().build());
     }
     public Mono<ServerResponse> update(ServerRequest request){
@@ -55,13 +69,21 @@ public class UserService {
         return this.insert(request);
     }
     public Mono<ServerResponse> login(ServerRequest request){
+
         return request.bodyToMono(LoginDto.class)
                 .flatMap(e->
                         dao.findFirstByUser(e.getUser())
-                                .doOnNext(System.out::println)
                                 .filter(user->BCrypt.checkpw(e.getPassword(), user.getPassword()))
-                        .switchIfEmpty(Mono.error(new Exception("no existe")))
-                ).flatMap(e->ok().body(Mono.just(e),User.class));
+                                .switchIfEmpty(Mono.error(new Exception("no existe")))
+                )
+                .flatMap(e->personDao.findById(e.getIdPerson().id)
+                    .map(f->new ResLoginDto(e.getId(),e.getUser(),e.getPassword(),e.getRole(),e.getIdPerson(),f))
+                ).doOnNext(System.out::println).
+                        flatMap(e->ok().body(Mono.just(e),ResLoginDto.class));
     }
+
+    @Autowired
+    GridFsOperations operations;
+
 
 }
