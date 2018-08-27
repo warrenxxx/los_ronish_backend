@@ -34,10 +34,8 @@ public class UserService {
     PersonDao personDao;
     public Mono<ServerResponse> insert(ServerRequest request){
         return request.bodyToMono(ReqRegisterDto.class)
-                .map(e->e
-                        .setPassword(BCrypt.hashpw(e.getPassword(), BCrypt.gensalt()))
-                )
-                .flatMap(e->personDao.insert(e.getPerson())
+                .map(e->e.setPassword(BCrypt.hashpw(e.getPassword(), BCrypt.gensalt())))
+                .flatMap(e->personDao.save(e.getPerson())
                         .flatMap(f->dao.insert(e.getUser().setIdPerson(Ref.PersonRef(f.getId()))))
                 )
 

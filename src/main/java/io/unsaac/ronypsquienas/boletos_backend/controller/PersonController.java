@@ -11,6 +11,7 @@ import io.unsaac.ronypsquienas.boletos_backend.Service.ImageService;
 import io.unsaac.ronypsquienas.boletos_backend.Service.PersonService;
 import io.unsaac.ronypsquienas.boletos_backend.models.Identifier;
 import io.unsaac.ronypsquienas.boletos_backend.models.Person;
+import io.unsaac.ronypsquienas.boletos_backend.utils.ComboBoxResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +37,6 @@ public class PersonController {
                 RouterFunctions
                         .route(RequestPredicates.GET(path),
                                 request -> ServerResponse.ok()
-                                        .contentType(MediaType.APPLICATION_JSON)
                                         .body(service.findAll(), Person.class))
                         .andRoute(RequestPredicates.POST(path),
                                 request -> ServerResponse.ok()
@@ -47,6 +47,9 @@ public class PersonController {
                         .andRoute(RequestPredicates.DELETE(path+"/{id}"),
                                 request -> ServerResponse.ok()
                                         .body(service.remove(request.pathVariable("id")), Boolean.class))
-        );
+        ).andRoute(RequestPredicates.GET(path+"/comboBox"),
+                request -> ServerResponse.ok()
+                        .body(service.getBox(), ComboBoxResponse.class))
+                ;
     }
 }

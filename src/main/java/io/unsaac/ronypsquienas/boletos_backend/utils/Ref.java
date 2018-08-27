@@ -25,4 +25,16 @@ public class Ref {
     public static Ref PersonRef(String id){
         return new Ref().setCollection("person").setId(id);
     }
+
+    public static Ref VehiculoRef(String id) {
+        return new Ref().setCollection("vehiculo").setId(id);
+    }
+
+    public static Ref TerminalRef(String s) {
+        return new Ref().setCollection("terminal").setId(s);
+    }
+
+    public static Ref ItinerarioRef(String x) {
+        return new Ref().setCollection("itinerario").setId(x);
+    }
 }

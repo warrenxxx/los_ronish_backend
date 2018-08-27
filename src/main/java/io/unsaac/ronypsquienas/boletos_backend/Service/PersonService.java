@@ -9,6 +9,7 @@ package io.unsaac.ronypsquienas.boletos_backend.Service;
 
 import io.unsaac.ronypsquienas.boletos_backend.dao.PersonDao;
 import io.unsaac.ronypsquienas.boletos_backend.models.Person;
+import io.unsaac.ronypsquienas.boletos_backend.utils.ComboBoxResponse;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,8 @@ public class PersonService {
     }
 
     public Mono<Person> save(Mono<Person> bodyToMono) {
-        return bodyToMono.map(e->e.getId().equals("") ?e.setId(new ObjectId().toString()):e)
+        return bodyToMono
+                .map(e->e.getId().equals("") ?e.setId(new ObjectId().toString()):e)
                 .flatMap(dao::save);
     }
 
@@ -35,5 +37,9 @@ public class PersonService {
 
     public Mono<Boolean> remove(String id) {
         return dao.deleteById(id).hasElement();
+    }
+
+    public Flux<ComboBoxResponse> getBox() {
+        return dao.findAll().map(e->new ComboBoxResponse(e.getId(),e.getDni()+" "+e.getNombre()));
     }
 }
