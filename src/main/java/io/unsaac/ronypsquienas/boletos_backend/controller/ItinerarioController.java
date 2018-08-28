@@ -9,6 +9,7 @@ package io.unsaac.ronypsquienas.boletos_backend.controller;
 
 import io.unsaac.ronypsquienas.boletos_backend.Service.ItinerarioService;
 import io.unsaac.ronypsquienas.boletos_backend.dao.ReservaDao;
+import io.unsaac.ronypsquienas.boletos_backend.dto.ReqItinerarioBuscar;
 import io.unsaac.ronypsquienas.boletos_backend.dto.ResItinerarioDto;
 import io.unsaac.ronypsquienas.boletos_backend.models.Itinerario.Itinerario;
 import io.unsaac.ronypsquienas.boletos_backend.models.Reserva;
@@ -25,6 +26,9 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 import java.util.Date;
 
+import static org.springframework.web.reactive.function.server.RequestPredicates.DELETE;
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
+import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 @Configuration
@@ -56,14 +60,16 @@ public class ItinerarioController {
     @Bean
     public RouterFunction<ServerResponse> itinerarioFunction() {
         return  RouterFunctions
-                .route(RequestPredicates.GET(path+"/{id}"),
+                .route(GET(path+"/{id}"),
                         request -> ok().body(service.find(request.pathVariable("id")), aClass))
-                .andRoute(RequestPredicates.GET(path),
+                .andRoute(GET(path),
                         request -> ok().body(service.findAll(), ResItinerarioDto.class))
-                .andRoute(RequestPredicates.POST(path),
+                .andRoute(POST(path),
                         request -> ok().body(service.save(request.bodyToMono(aClass)), aClass))
-                .andRoute(RequestPredicates.DELETE(path+"/{id}"),
+                .andRoute(DELETE(path+"/{id}"),
                         request -> ok().body(service.remove(request.pathVariable("id")), Boolean.class))
+                .andRoute(POST(path+"/buscar"),
+                        request->ok().body(service.findDetail(request.bodyToMono(ReqItinerarioBuscar.class)),ResItinerarioDto.class))
                 ;
     }
 }

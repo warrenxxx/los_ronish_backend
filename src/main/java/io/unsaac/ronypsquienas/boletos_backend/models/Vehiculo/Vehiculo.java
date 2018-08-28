@@ -27,5 +27,6 @@ public class Vehiculo{
     public Ref[] idPersonaTerramozas;
     public Ref[] idPersonaChoferes;
     public Asiento[] asientos;
+    public String img;
 }
 

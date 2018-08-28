@@ -38,8 +38,8 @@ public class ResVehiculoDto extends Vehiculo {
 
     public String[] typos;
 
-    public ResVehiculoDto(String id, String modelo, Integer NroAsientos, TipoVeiculo tipoVeiculo, Ref[] idPersonaTerramozas, Ref[] idPersonaChoferes, Asiento[] asientos, Person[] terramozas, Person[] choferes, String[] typos) {
-        super(id, modelo, NroAsientos, tipoVeiculo, idPersonaTerramozas, idPersonaChoferes, asientos);
+    public ResVehiculoDto(String id, String modelo, Integer NroPisos, TipoVeiculo tipoVeiculo, Ref[] idPersonaTerramozas, Ref[] idPersonaChoferes, Asiento[] asientos, String img, Person[] terramozas, Person[] choferes, String[] typos) {
+        super(id, modelo, NroPisos, tipoVeiculo, idPersonaTerramozas, idPersonaChoferes, asientos, img);
         this.terramozas = terramozas;
         this.choferes = choferes;
         this.typos = typos;

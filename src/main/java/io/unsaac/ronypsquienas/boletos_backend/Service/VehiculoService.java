@@ -46,7 +46,7 @@ public class VehiculoService {
                     e.getTipoVeiculo(),
                     e.getIdPersonaTerramozas(),
                     e.getIdPersonaChoferes(),
-                    e.getAsientos(),null,null,null
+                    e.getAsientos(),e.getImg(),null,null,null
                 )).flatMap(e->
                     Flux.just(e.getIdPersonaChoferes())
                             .flatMap(idChoferes->personService.findById(idChoferes.id))

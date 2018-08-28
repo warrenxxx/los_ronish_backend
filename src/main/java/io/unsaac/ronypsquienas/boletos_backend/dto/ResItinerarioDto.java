@@ -36,11 +36,16 @@ public class ResItinerarioDto extends Itinerario {
     @Setter
     public Terminales destino;
 
-    public ResItinerarioDto(String id, Ref idVeiculo, Ref idterminalOrigen, Ref idterminalDestino, Date fechaSalida, Date fechaLLegada, CostosAsientosItinerario[] costosAsientosItinerarios, Vehiculo vehiculo, Terminales origen, Terminales destino) {
-        super(id, idVeiculo, idterminalOrigen, idterminalDestino, fechaSalida, fechaLLegada, costosAsientosItinerarios);
+    @Getter
+    @Setter
+    public Integer [] reservados;
+
+    public ResItinerarioDto(String id, Ref idVeiculo, Ref idterminalOrigen, Ref idterminalDestino, Date fechaSalida, Date fechaLLegada, Double costo, Vehiculo vehiculo, Terminales origen, Terminales destino, Integer[] reservados) {
+        super(id, idVeiculo, idterminalOrigen, idterminalDestino, fechaSalida, fechaLLegada, costo);
         this.vehiculo = vehiculo;
         this.origen = origen;
         this.destino = destino;
+        this.reservados = reservados;
     }
 
     public static ResItinerarioDto getItineraraio(Itinerario x){
@@ -51,7 +56,7 @@ public class ResItinerarioDto extends Itinerario {
                 x.getIdterminalDestino(),
                 x.getFechaSalida(),
                 x.getFechaLLegada(),
-                null,null,null,null
+                x.getCosto(),null,null,null,null
         );
     }
 }

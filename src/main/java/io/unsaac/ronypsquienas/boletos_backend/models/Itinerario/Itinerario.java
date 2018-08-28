@@ -28,5 +28,5 @@ public class Itinerario {
     private Ref idterminalDestino;
     private Date fechaSalida;
     private Date fechaLLegada;
-    private CostosAsientosItinerario[] costosAsientosItinerarios;
+    private Double costo;
 }
