@@ -14,6 +14,7 @@ import io.unsaac.ronypsquienas.boletos_backend.dao.VehiculoDao;
 import io.unsaac.ronypsquienas.boletos_backend.dto.ReqItinerarioBuscar;
 import io.unsaac.ronypsquienas.boletos_backend.dto.ResItinerarioDto;
 import io.unsaac.ronypsquienas.boletos_backend.models.Itinerario.Itinerario;
+import io.unsaac.ronypsquienas.boletos_backend.models.Reserva;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTimeComparator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,7 +124,7 @@ public class ItinerarioService {
                         .map(e::setDestino)
         ).flatMap(
                 e->reservaDao.findAllByIdItinerario_Id(new ObjectId(e.getId()))
-                        .map(f->f.getNumeroAsiento())
+                        .map(Reserva::getNumeroAsiento)
                         .collectList()
                         .map(f->e.setReservados(f.toArray(new Integer[0])))
         );
