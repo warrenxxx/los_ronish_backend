@@ -1,5 +1,6 @@
 package io.unsaac.ronypsquienas.boletos_backend;
 
+import io.unsaac.ronypsquienas.boletos_backend.Service.ReservaService;
 import io.unsaac.ronypsquienas.boletos_backend.dao.ItinerarioDao;
 import org.bson.types.ObjectId;
 import org.springframework.boot.CommandLineRunner;
@@ -15,14 +16,9 @@ public class BoletosBackendApplication {
     }
 
     @Bean
-    CommandLineRunner commandLineRunner2(ItinerarioDao dao) {
+    CommandLineRunner commandLineRunner2(ReservaService dao) {
         return args -> {
-            System.out.println("www");
-
-            dao.findAllByIdterminalOrigen_IdAndIdterminalDestino_Id(
-                    new ObjectId("5b81f6c3ee69ac283cf5896d"),
-                new ObjectId("5b81f6c9ee69ac283cf5896e")
-            )
+            dao.findAll()
                     .subscribe(System.out::println);
         };
     }

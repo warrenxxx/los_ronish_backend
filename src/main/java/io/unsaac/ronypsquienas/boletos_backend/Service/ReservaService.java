@@ -51,11 +51,9 @@ public class ReservaService {
                 e.getStado(),
                 e.getNumeroAsiento(),null,null
         )).flatMap(
-                e->personDao.findById(e.getIdPersonaPasajero().id)
-                        .map(e::setPasajero)
+                e->personDao.findById(e.getIdPersonaPasajero().id).map(e::setPasajero)
         ).flatMap(
-                e->itinerarioDao.findById(e.getIdItinerario().id)
-                        .map(ResItinerarioDto::getItineraraio)
+                e->itinerarioDao.findById(e.getIdItinerario().id).map(ResItinerarioDto::getItineraraio)
                         .flatMap(resItinerarioDto->
                                 terminalesDao.findById(resItinerarioDto.getIdterminalDestino().id)
                                 .map(resItinerarioDto::setDestino)
