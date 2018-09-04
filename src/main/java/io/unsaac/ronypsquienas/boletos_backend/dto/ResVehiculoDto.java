@@ -7,7 +7,6 @@
  */
 package io.unsaac.ronypsquienas.boletos_backend.dto;
 
-import com.sun.deploy.perf.PerfRollup;
 import io.unsaac.ronypsquienas.boletos_backend.models.Person;
 import io.unsaac.ronypsquienas.boletos_backend.models.Vehiculo.Asiento;
 import io.unsaac.ronypsquienas.boletos_backend.models.Vehiculo.TipoVeiculo;
